@@ -9,9 +9,9 @@ var express         = require("express"),
 mongoose.connect('mongodb://localhost:27017/blog', { useNewUrlParser: true });
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressSanitizer());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
-app.use(expressSanitizer());
 
 mongoose.set('useFindAndModify', false);
 
@@ -66,7 +66,7 @@ app.get("/blogs/new", function(req, res) {
 
 app.post("/blogs", function(req,res){
     //create blogs
-    req.body.blog.body = req.sanitize(req.body.blog.body);
+    req.body.blogs.body = req.sanitize(req.body.blogs.body);
     Blog.create(req.body.blogs, function(err, newBlog){
       if(err){
           res.render("index");
